@@ -1,0 +1,32 @@
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-inner slimscroll">
+    <div id="sidebar-menu" class="sidebar-menu">
+      <ul>
+        <li>
+          <a href="{% url 'index' %}"><i class="la la-dashboard"></i> <span>Статистика</span></a>
+        </li>
+        <li>
+          <a href="{% url 'vacancies' %}"><i class="la la-users"></i> <span>Вакансии</span></a>
+        </li>
+        <li>
+          <a href="{% url 'candidates' %}"><i class="la la-users"></i> <span>Список кандидатов</span></a>
+        </li>
+        <li>
+          <a href="{% url 'video' %}"><i class="la la-phone"></i> <span>Видеозвонки</span></a>
+        </li>
+        <li>
+          <a href="{% url 'chats' %}"><i class="la la-comments"></i> <span>Чаты</span></a>
+        </li>
+        <li class="submenu">
+          <a href="#"><i class="la la-columns"></i> <span> Настройки </span> <span class="menu-arrow"></span></a>
+          <ul style="display: none;">
+            <li><a href="employees/login.html"> Войти </a></li>
+            <li><a href="employees/register.html"> Регистрация </a></li>
+            <li><a href="employees/forgot-password.html"> Забыл пароль :-( </a></li>
+            <li><a href="employees/profile.html"> Профиль </a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
