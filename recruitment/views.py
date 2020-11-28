@@ -1,4 +1,7 @@
+from django.core.paginator import Paginator
 from django.shortcuts import render
+
+from recruitment.models import Candidate, VacancyRequest
 
 
 def index(request):
@@ -6,11 +9,34 @@ def index(request):
 
 
 def vacancies(requests):
-    return render(requests, 'vacancies.html')
+    all_vacancies =  VacancyRequest.objects.all()
+    vacancies_list = []
+    for vacancy in all_vacancies:
+        vacancies_list.append({
+            'name': vacancy.title,
+            'level': vacancy.level.name,
+            'direction': 'Аналитика',
+            'department': 'Финансовый департамент',
+            'published_at': vacancy.published_at,
+            'status': 1,
+        })
+
+    return render(requests, 'vacancies.html', context={'vacancies': vacancies_list})
 
 
 def candidates(requests):
-    return render(requests, 'candidates.html')
+    all_candidates = Candidate.objects.all()
+    candidates = []
+    for candidate in all_candidates:
+        candidates.append({
+            'name': candidate.title,
+            'raiting': 6,
+            'social': 'OK',
+            'response_date': '10-11-2020',
+            'recommended_vacancy': VacancyRequest.objects.get(pk=1),
+            'contacts': 'elisey.fedorov@gmail.com',
+        })
+    return render(requests, 'candidates.html', context={'candidates': candidates})
 
 
 def new_vacancy(requests):

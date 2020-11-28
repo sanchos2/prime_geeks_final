@@ -5,7 +5,7 @@ from urllib.parse import urljoin
 from parse_hh_data import download, parse
 from datetime import datetime, timedelta
 from django.db.utils import IntegrityError
-from recruitment.models import Candidate, Language
+from recruitment.models import Candidate
 
 
 def parse_date(date_str):
@@ -45,6 +45,7 @@ def get_hh_resume():
     with open('resume.txt', 'r') as file:
         for row in file:
             list_resume.append(row.rstrip())
+    print(list_resume)
     for resume in list_resume:
         source_id = resource_identifier + str(resume)
         raw_data = download.resume(resume)
@@ -105,7 +106,7 @@ def get_hh_resume():
         source = resume_absolute_url
 
         try:
-            Candidate.objects.get_or_create(
+            candidate, created = Candidate.objects.get_or_create(
                                 gender=gender,
                                 age=age,
                                 city=city,
@@ -127,5 +128,11 @@ def get_hh_resume():
                                 source=source,
                                 source_id=source_id,
                             )
+            print(candidate, created)
+            if created:
+                for language in language_list:
+                    candidate.language.name = language['name']
+                    candidate.language.level = language['level']
+                    candidate.save()
         except (IntegrityError, decimal.InvalidOperation):
             pass
