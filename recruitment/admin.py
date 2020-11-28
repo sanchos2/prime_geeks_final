@@ -1,3 +1,10 @@
 from django.contrib import admin
 
-# Register your models here.
+from recruitment.models import Candidate, Language
+
+class CandidateAdmin(admin.ModelAdmin):
+    list_display = ['title', 'salary']
+    list_per_page = 40
+
+admin.site.register(Candidate, CandidateAdmin)
+admin.site.register(Language)
