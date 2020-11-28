@@ -10,5 +10,5 @@ urlpatterns = [
     path('vacancy/', views.view_vacancy, name='view_vacancy'),  # TODO pk
     path('video/', views.video, name='video'),
     path('chats/', views.chats, name='chats'),
-    path('vacancy/new/', views.vacancy_new, name='vacancy_new'),
+
 ]
