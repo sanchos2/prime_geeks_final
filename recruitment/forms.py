@@ -1,5 +1,6 @@
 from django import forms
 
+
 from recruitment.models import VacancyRequest
 
 
