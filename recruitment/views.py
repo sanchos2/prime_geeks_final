@@ -1,5 +1,5 @@
 from django.core.paginator import Paginator
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 from recruitment.models import Candidate, VacancyRequest
 
@@ -33,7 +33,7 @@ def candidates(requests):
             'raiting': 6,
             'social': 'OK',
             'response_date': '10-11-2020',
-            'recommended_vacancy': VacancyRequest.objects.get(pk=1),
+            'recommended_vacancy': get_object_or_404(VacancyRequest, pk=1),
             'contacts': 'elisey.fedorov@gmail.com',
         })
     return render(requests, 'candidates.html', context={'candidates': candidates})
