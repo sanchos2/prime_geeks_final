@@ -89,24 +89,25 @@ class Level(models.Model):
 
 
 class VacancyRequest(models.Model):
-    title = models.CharField(verbose_name='Вакансия', max_length=250)
+    title = models.CharField(verbose_name='Название вакансии', max_length=250)
     level = models.ForeignKey(
         Level,
         on_delete=models.DO_NOTHING,
-        related_name='vacancies_requests'
+        related_name='vacancies_requests',
+        verbose_name='Уровень',
     )
-    teaser = models.TextField(verbose_name='Тизер', blank=True)
+    teaser = models.TextField(verbose_name='О компании и вакансии', blank=True)
     description = models.TextField(verbose_name='Описание вакансии', blank=True)
     location_city = models.CharField(verbose_name='Город', max_length=250, blank=True)
     location_country = models.CharField(verbose_name='Страна', max_length=250, blank=True)
     hard_requirements = models.ManyToManyField(
-        'HardRequirements',
+        HardRequirements,
         related_name='vacancies_requests',
-        verbose_name='Хард скилы',
+        verbose_name='Требования',
         blank=True
     )
     soft_requirements = models.ManyToManyField(
-        'SoftRequirements',
+        SoftRequirements,
         related_name='vacancies_requests',
         verbose_name='Софт скилы',
         blank=True

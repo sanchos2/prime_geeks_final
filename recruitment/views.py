@@ -1,6 +1,7 @@
 from django.core.paginator import Paginator
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 
+from recruitment.forms import VacancyForm
 from recruitment.models import Candidate, VacancyRequest
 
 
@@ -9,7 +10,7 @@ def index(request):
 
 
 def vacancies(requests):
-    all_vacancies =  VacancyRequest.objects.all()
+    all_vacancies = VacancyRequest.objects.all()
     vacancies_list = []
     for vacancy in all_vacancies:
         vacancies_list.append({
@@ -53,3 +54,15 @@ def video(requests):
 
 def chats(requests):
     return render(requests, 'chats.html')
+
+
+def new_vacancy(request):
+
+    if request.method == 'POST':
+        form = VacancyForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('vacancies')
+    else:
+        form = VacancyForm()
+    return render(request, 'new_vacancy.html', {'form': form})

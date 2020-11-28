@@ -1,441 +1,156 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% load static %}
 {% block content %}
 
-<style type="text/css">
-  .variants li
-  {
-    width: 500px;
-    height: 60px;
-    max-height: 60px;
-    padding: 11px;
-    background-color: #0066cc;
-    margin-top: 15px;
-    border-radius: 10px;
-    list-style-type: none;
-    color: #fff;
-  }
-  .variants li:hover{
-    background-color: #1e3262;
-  }
+  <style type="text/css">
+      .variants li {
+          width: 500px;
+          height: 60px;
+          max-height: 60px;
+          padding: 11px;
+          background-color: #0066cc;
+          margin-top: 15px;
+          border-radius: 10px;
+          list-style-type: none;
+          color: #fff;
+      }
 
-</style>
+      .variants li:hover {
+          background-color: #1e3262;
+      }
 
-<div class="page-wrapper">
-  <div class="content container-fluid">
-    <div class="row">
-      <div class="col-md-12 col-md-offset-2" style="margin-left: 0%;">
-        <form>
-          <h3 class="page-title">Добавить новую вакансию</h3>
-          <div class="row">
-            <div class="col-sm-6">
-              <div class="form-group">
-                <label>Название вакансии <span class="text-danger">*</span></label>
-                <input class="form-control" type="text" value="Аналитик Big Data в Московский офис компании">
+  </style>
+
+  <div class="page-wrapper">
+    <div class="content container-fluid">
+      <div class="row">
+        <div class="col-md-12 col-md-offset-2" style="margin-left: 0%;">
+          <form method="post">
+            {% csrf_token %}
+            <h3 class="page-title">Добавить новую вакансию</h3>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  {{ form.title|as_crispy_field }}
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>Рыночное название вакансии <span class="text-danger">*</span></label>
+                  <input class="form-control " value="Аналитик Big Data" type="text">
+                </div>
               </div>
             </div>
-            <div class="col-sm-6">
-              <div class="form-group">
-                <label>Рыночное название вакансии <span class="text-danger">*</span></label>
-                <input class="form-control " value="Аналитик Big Data" type="text">
+            <div class="row">
+              <div class="col-sm-6 col-md-6 col-lg-3">
+                <div class="form-group">
+                  {{ form.level|as_crispy_field }}
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-3">
+                <div class="form-group">
+                  <label>Направление</label>
+                  <input class="form-control" value="Аналитика" type="text">
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-3">
+                <div class="form-group">
+                  <label>Отдел</label>
+                  <select class="form-control select">
+                    <option>Разработки</option>
+                    <option>Информационной безопасности</option>
+                    <option>Облачные сервисы</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-3">
+                <div class="form-group">
+                  <label>Ответственный менеджер</label>
+                  <input class="form-control" value="Победова В.В." type="text">
+                </div>
               </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-6 col-md-6 col-lg-3">
-              <div class="form-group">
-                <label>Уровень</label>
-                <select class="form-control select">
-                  <option>Junior</option>
-                  <option>Middle</option>
-                  <option>Senior</option>
-                </select>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="col-sm-6 col-md-6 col-lg-3" style="margin-left: -15px;">
+                  <div class="form-group">
+                    {{ form.salary_min|as_crispy_field }} {{ form.salary_max|as_crispy_field }}
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-3" style="margin-left: 10px;">
+                  <div class="form-group">
+                    <label>Анализ ЗП по рынку</label>
+                    <p style="color: red;"><b>На 30% ниже рынка</b></p>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    {{ form.teaser|as_crispy_field }}
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    {{ form.description|as_crispy_field }}
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="variants" style="margin-top: 40px;">
+                    <ul>
+                      <li>Проектировать и разрабатывать витрины данных для моделирования, аналитики и отчетности</li>
+                      <li>Участвовать в проработке архитектуры data flow и модели данных</li>
+                      <li>Налаживать регулярные процессы подготовки и поставки данных для продуктовых команд и data
+                        scientist-ов
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="variants" style="margin-top: 40px;">
+                      {{ form.hard_requirements|as_crispy_field }}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="variants" style="margin-top: 40px;">
+                    <ul>
+                      <li>Опыт работы с Oracle</li>
+                      <li>Опыт работы с MS SQL</li>
+                      <li>Знает теории реляционных СУБД, основных понятий и концепций Data Warehousing и Big Data</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    {{ form.working_conditions|as_crispy_field }}
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-3 m-t-20" style="margin-left: 40px; margin-right: -150px;">
+                  <input type="checkbox" name="option2" value="a2" style="margin-right: 10px;">HH.ru<Br>
+                  <input type="checkbox" name="option2" value="a2" style="margin-right: 10px;">Rabota.ru<Br>
+                  <input type="checkbox" name="option2" value="a2" style="margin-right: 10px;">Geekjob<Br>
+                </div>
+                <div class="col-sm-3 m-t-20">
+                  <button type="submit" class="btn btn-primary"
+                          style="background-color: #1e3262; border: #0066cc; height: 49px;">ОПУБЛИКОВАТЬ
+                  </button>
+                </div>
               </div>
             </div>
-            <div class="col-sm-6 col-md-6 col-lg-3">
-              <div class="form-group">
-                <label>Направление</label>
-                <input class="form-control" value="Аналитика" type="text">
-              </div>
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-3">
-              <div class="form-group">
-                <label>Отдел</label>
-                <select class="form-control select">
-                  <option>Разработки</option>
-                  <option>Информационной безопасности</option>
-                  <option>Облачные сервисы</option>
-                </select>
-              </div>
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-3">
-              <div class="form-group">
-                <label>Ответственный менеджер</label>
-                <input class="form-control" value="Победова В.В." type="text">
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-12">
-            <div class="col-sm-6 col-md-6 col-lg-3" style="margin-left: -15px;">
-              <div class="form-group">
-                <label>Зарплата</label>
-                <input class="form-control" value="100.000 руб." type="text">
-              </div>
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-3" style="margin-left: 10px;">
-              <div class="form-group">
-                <label>Анализ ЗП по рынку</label>
-                <p style="color: red;"><b>На 30% ниже рынка</b></p>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-6">
-              <div class="form-group">
-                <label>О компании и вакансии</label>
-                <textarea style="width: 600px; max-width: 600px; height: 200px; max-height: 200px; padding-left: 20px; padding-top: 10px;  padding-right: 20px;">
-В Департаменте анализа и моделирования данных мы решаем задачи продвинутой аналитики, используем Big Data, машинное обучение и Data Science. Мы ищем в команду неравнодушного к данным и ответственного к качеству Data Engineer/Data Architect.
-                </textarea>
-              </div>
-            </div>
-            <!-- <div class="col-sm-6">
-              <div class="form-group">
-                <label>Phone Number</label>
-                <input class="form-control" value="818-978-7102" type="text">
-              </div>
-            </div> -->
-
-          </div>
-          <div class="row">
-            <div class="col-sm-6">
-              <div class="form-group">
-                <label>Обязанности</label>
-                <textarea style="width: 600px; max-width: 600px; height: 400px; max-height: 400px; padding-left: 20px; padding-top: 10px;  padding-right: 20px;">
-Проектировать и разрабатывать витрины данных для моделирования, аналитики и отчетности
-
-Заниматься анализом исходных данных в различных СУБД (системы-источники и DWH) и форматах для решения задач по оценке структуры, качества, полноты и применимости данных
-
-Осуществлять извлечение, очистку, загрузку и трансформацию больших объемов данных из различных источников (RDBMS, Hadoop, плоские файлы) в рабочую область (Hadoop, Oracle), а также подготавливать требования для разработки промышленных ETL-процессов
-
-Участвовать в проработке архитектуры data flow и модели данных
-
-Налаживать регулярные процессы подготовки и поставки данных для продуктовых команд и data scientist-ов
-
-Контролировать качество загружаемых данных, разрабатывать автоматизированные инструменты для оценки качества данных
-
-Участвовать во внедрении моделей в промышленный контур
-
-Оказывать экспертную поддержку внутренним потребителям (data analysts, data scientists) по вопросам, связанным с использованием данных
-                </textarea>
-              </div>
-            </div>
-            <div class="col-sm-6">
-              <div class="variants" style="margin-top: 40px;">
-                <ul>
-                  <li>Проектировать и разрабатывать витрины данных для моделирования, аналитики и отчетности</li>
-                  <li>Участвовать в проработке архитектуры data flow и модели данных</li>
-                  <li>Налаживать регулярные процессы подготовки и поставки данных для продуктовых команд и data scientist-ов</li>
-                </ul>
-              </div>
-            </div>
-            <!-- <div class="col-sm-6">
-              <div class="form-group">
-                <label>Fax</label>
-                <input class="form-control" value="818-978-7102" type="text">
-              </div>
-            </div> -->
-          </div>
-          <div class="row">
-            <div class="col-sm-6">
-              <div class="form-group">
-                <label>Требования</label>
-                <textarea style="width: 600px; max-width: 600px; height: 400px; max-height: 400px; padding-left: 20px; padding-top: 10px;  padding-right: 20px;">
-Владеет SQL (аналитические функции, подзапросы, хранимые процедуры, оптимизация запросов)
-
-Знает теории реляционных СУБД, основных понятий и концепций Data Warehousing и Big Data
-
-Обладает опытом разработки ETL-процессов и витрин данных
-
-Работал с большими объёмами данных с использованием технологий Oracle, Teradata, MS SQL, Sybase IQ, Hadoop, SAS
-
-Способен к анализу, систематизации, классификации
-
-Готов работать с большими объёмами информации
-
-Инициативный командный игрок
-                </textarea>
-              </div>
-            </div>
-            <div class="col-sm-6">
-              <div class="variants" style="margin-top: 40px;">
-                <ul>
-                  <li>Опыт работы с Oracle</li>
-                  <li>Опыт работы с MS SQL</li>
-                  <li>Знает теории реляционных СУБД, основных понятий и концепций Data Warehousing и Big Data</li>
-                </ul>
-              </div>
-            </div>
-            <!-- <div class="col-sm-6">
-              <div class="form-group">
-                <label>Fax</label>
-                <input class="form-control" value="818-978-7102" type="text">
-              </div>
-            </div> -->
-          </div>
-          <div class="row">
-            <div class="col-sm-6">
-              <div class="form-group">
-                <label>Условия</label>
-                <textarea style="width: 600px; max-width: 600px; height: 200px; max-height: 200px; padding-left: 20px; padding-top: 10px;  padding-right: 20px;">
-Стать частью команды, реализующей программы цифровой трансформации банка - на основе передового опыта и инновационных идей 21 века
-
-Созидательную среду и интересные проекты
-
-Работать в команде профессионалов – неравнодушных, активных, ответственных за свой результат
-
-Конкурентную заработную плату и систему премирования, включающую ежегодные бонусы
-
-ДМС с первого дня
-
-Многочисленные скидки и бонусы от партнеров
-
-Возможности для профессионального развития
-
-Комфортный офис
-
-Релокационный бонус (оплата переезда сотрудника и его семьи, оплата аренды квартиры)</textarea>
-              </div>
-            </div>
-            <!-- <div class="col-sm-6">
-              <div class="form-group">
-                <label>Fax</label>
-                <input class="form-control" value="818-978-7102" type="text">
-              </div>
-            </div> -->
-          </div>
-          <div class="row">
-            <div class="col-sm-3 m-t-20" style="margin-left: 40px; margin-right: -150px;">
-              <input type="checkbox" name="option2" value="a2" style="margin-right: 10px;">HH.ru<Br>
-              <input type="checkbox" name="option2" value="a2" style="margin-right: 10px;">Rabota.ru<Br>
-              <input type="checkbox" name="option2" value="a2" style="margin-right: 10px;">Geekjob<Br>
-            </div>
-            <div class="col-sm-3 m-t-20">
-              <button type="button" class="btn btn-primary" style="background-color: #1e3262; border: #0066cc; height: 49px;">ОПУБЛИКОВАТЬ</button>
-            </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   </div>
-  <div class="notification-box">
-    <div class="msg-sidebar notifications msg-noti">
-      <div class="topnav-dropdown-header">
-        <span>Messages</span>
-      </div>
-      <div class="drop-scroll msg-list-scroll">
-        <ul class="list-box">
-          <li>
-            <a href="chat.html">
-              <div class="list-item">
-                <div class="list-left">
-                  <span class="avatar">R</span>
-                </div>
-                <div class="list-body">
-                  <span class="message-author">Richard Miles </span>
-                  <span class="message-time">12:28 AM</span>
-                  <div class="clearfix"></div>
-                  <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                </div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="chat.html">
-              <div class="list-item new-message">
-                <div class="list-left">
-                  <span class="avatar">J</span>
-                </div>
-                <div class="list-body">
-                  <span class="message-author">John Doe</span>
-                  <span class="message-time">1 Aug</span>
-                  <div class="clearfix"></div>
-                  <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                </div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="chat.html">
-              <div class="list-item">
-                <div class="list-left">
-                  <span class="avatar">T</span>
-                </div>
-                <div class="list-body">
-                  <span class="message-author"> Tarah Shropshire </span>
-                  <span class="message-time">12:28 AM</span>
-                  <div class="clearfix"></div>
-                  <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                </div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="chat.html">
-              <div class="list-item">
-                <div class="list-left">
-                  <span class="avatar">M</span>
-                </div>
-                <div class="list-body">
-                  <span class="message-author">Mike Litorus</span>
-                  <span class="message-time">12:28 AM</span>
-                  <div class="clearfix"></div>
-                  <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                </div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="chat.html">
-              <div class="list-item">
-                <div class="list-left">
-                  <span class="avatar">C</span>
-                </div>
-                <div class="list-body">
-                  <span class="message-author"> Catherine Manseau </span>
-                  <span class="message-time">12:28 AM</span>
-                  <div class="clearfix"></div>
-                  <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                </div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="chat.html">
-              <div class="list-item">
-                <div class="list-left">
-                  <span class="avatar">D</span>
-                </div>
-                <div class="list-body">
-                  <span class="message-author"> Domenic Houston </span>
-                  <span class="message-time">12:28 AM</span>
-                  <div class="clearfix"></div>
-                  <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                </div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="chat.html">
-              <div class="list-item">
-                <div class="list-left">
-                  <span class="avatar">B</span>
-                </div>
-                <div class="list-body">
-                  <span class="message-author"> Buster Wigton </span>
-                  <span class="message-time">12:28 AM</span>
-                  <div class="clearfix"></div>
-                  <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                </div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="chat.html">
-              <div class="list-item">
-                <div class="list-left">
-                  <span class="avatar">R</span>
-                </div>
-                <div class="list-body">
-                  <span class="message-author"> Rolland Webber </span>
-                  <span class="message-time">12:28 AM</span>
-                  <div class="clearfix"></div>
-                  <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                </div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="chat.html">
-              <div class="list-item">
-                <div class="list-left">
-                  <span class="avatar">C</span>
-                </div>
-                <div class="list-body">
-                  <span class="message-author"> Claire Mapes </span>
-                  <span class="message-time">12:28 AM</span>
-                  <div class="clearfix"></div>
-                  <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                </div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="chat.html">
-              <div class="list-item">
-                <div class="list-left">
-                  <span class="avatar">M</span>
-                </div>
-                <div class="list-body">
-                  <span class="message-author">Melita Faucher</span>
-                  <span class="message-time">12:28 AM</span>
-                  <div class="clearfix"></div>
-                  <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                </div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="chat.html">
-              <div class="list-item">
-                <div class="list-left">
-                  <span class="avatar">J</span>
-                </div>
-                <div class="list-body">
-                  <span class="message-author">Jeffery Lalor</span>
-                  <span class="message-time">12:28 AM</span>
-                  <div class="clearfix"></div>
-                  <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                </div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="chat.html">
-              <div class="list-item">
-                <div class="list-left">
-                  <span class="avatar">L</span>
-                </div>
-                <div class="list-body">
-                  <span class="message-author">Loren Gatlin</span>
-                  <span class="message-time">12:28 AM</span>
-                  <div class="clearfix"></div>
-                  <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                </div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="chat.html">
-              <div class="list-item">
-                <div class="list-left">
-                  <span class="avatar">T</span>
-                </div>
-                <div class="list-body">
-                  <span class="message-author">Tarah Shropshire</span>
-                  <span class="message-time">12:28 AM</span>
-                  <div class="clearfix"></div>
-                  <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                </div>
-              </div>
-            </a>
-          </li>
-        </ul>
-      </div>
-      <div class="topnav-dropdown-footer">
-        <a href="chat.html">See all messages</a>
-      </div>
-    </div>
-  </div>
-</div>
 {% endblock %}
