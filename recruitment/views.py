@@ -28,13 +28,13 @@ def vacancies(requests):
 
 def candidates(requests):
     """Рендеринг списка кандидатов."""
-    all_candidates = Candidate.objects.all().order_by('rating')[:10]
+    all_candidates = Candidate.objects.all().order_by('ratings')[:10]
     candidates_list = []
     for candidate in all_candidates:
         candidates_list.append({
             'name': candidate.title,
-            'rating': candidate.rating,
-            'social': candidate.rating,
+            'rating': candidate,
+            'social': candidate,
             'response_date': '10-11-2020',
             'recommended_vacancy': get_object_or_404(VacancyRequest, pk=1),
             'contacts': 'elisey.fedorov@gmail.com',

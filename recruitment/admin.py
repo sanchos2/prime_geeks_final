@@ -4,15 +4,21 @@ from recruitment.models import Candidate, Language
 from recruitment.models import Level, HardRequirements, Rating, SoftRequirements, Specialization, VacancyRequest
 
 
+class RatingInline(admin.TabularInline):
+    model = Rating
+
+
 class CandidateAdmin(admin.ModelAdmin):
     """Кастомизация админки."""
 
     list_display = ['title', 'salary']
     search_fields = ['source_id', 'title']
+    inlines = [RatingInline]
     list_per_page = 40
 
 
 admin.site.register(Level)
+admin.site.register(Rating)
 admin.site.register(SoftRequirements)
 admin.site.register(HardRequirements)
 admin.site.register(Specialization)
