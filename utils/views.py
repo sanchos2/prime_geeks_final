@@ -1,11 +1,12 @@
-from django.shortcuts import render
-from utils.models import Vacancy
-from recruitment.models import Candidate
 from djqscsv import render_to_csv_response
+
+from recruitment.models import Candidate
+from utils.models import Vacancy
 
 
 def csv_view_vacancies(request):
-    qs = Vacancy.objects.all().values(
+    """Функция выгрузки данных модели в csv."""
+    exported_data = Vacancy.objects.all().values(
         'title',
         'published_at',
         'source_id',
@@ -22,13 +23,14 @@ def csv_view_vacancies(request):
         'specialization',
         'branch',
         'source',
-        'description'
+        'description',
     )
-    return render_to_csv_response(qs)
+    return render_to_csv_response(exported_data)
 
 
 def csv_view_resume(request):
-    qs = Candidate.objects.all().values(
+    """Функция выгрузки данных модели в csv."""
+    exported_data = Candidate.objects.all().values(
         'gender',
         'age',
         'city',
@@ -50,4 +52,4 @@ def csv_view_resume(request):
         'source_id',
         'last_job_responsibilities',
     )
-    return render_to_csv_response(qs)
+    return render_to_csv_response(exported_data)

@@ -1,6 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+<style type="text/css">
+  .btn-primary {
+    background-color: #1e3262;
+    border: 1px solid #1e3262;}
+</style>
+
+
+
 <div class="page-wrapper">
   <div class="chat-main-row">
     <div class="chat-main-wrapper">
@@ -15,14 +23,15 @@
                       class="status online"></span></a>
                 </div>
                 <div class="user-info pull-left">
-                  <a href="profile.html" title="Mike Litorus"><span class="font-bold">Mike Litorus</span> <i
-                      class="typing-text">Typing...</i></a>
-                  <span class="last-seen">Last seen today at 7:50 AM</span>
-                </div>
+                  <a href="profile.html" title="Mike Litorus"><span class="font-bold">Сергей Кондратьев</span> <i
+                      class="typing-text">Печатает...</i></a>
+                  <span class="last-seen">Заходил в 7:50</span>
+
+               </div>
               </div>
               <ul class="nav navbar-nav pull-right chat-menu">
-                <li class="dropdown">
-                  <a href="" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i
+                <li class="dropdown" >
+                  <a href="" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" style="color: #1e3262"><i
                       class="fa fa-cog"></i></a>
                   <ul class="dropdown-menu">
                     <li><a href="javascript:void(0)">Delete Conversations</a></li>
@@ -51,7 +60,11 @@
                       <div class="chat-body">
                         <div class="chat-bubble">
                           <div class="chat-content">
-                            <p>Hello. What can I do for you?</p>
+                                              <audio controls>
+    <source src="/static/assets/img/1.mp3" type="audio/mpeg">
+    Тег audio не поддерживается вашим браузером. 
+    <a href="/static/assets/img/1.mp3">Скачайте музыку</a>.
+  </audio>
                             <span class="chat-time">8:30 am</span>
                           </div>
                           <div class="chat-action-btns">
@@ -76,8 +89,7 @@
                       <div class="chat-body">
                         <div class="chat-bubble">
                           <div class="chat-content">
-                            <p>I'm just looking around.</p>
-                            <p>Will you tell me something about yourself? </p>
+                            <p>Добрый день. Спасибо, буду ждать</p>
                             <span class="chat-time">8:35 am</span>
                           </div>
                           <div class="chat-action-btns">
@@ -90,7 +102,7 @@
                         </div>
                         <div class="chat-bubble">
                           <div class="chat-content">
-                            <p>Are you there? That time!</p>
+                            <p>С нетерпением жду ответа</p>
                             <span class="chat-time">8:40 am</span>
                           </div>
                           <div class="chat-action-btns">
@@ -107,7 +119,11 @@
                       <div class="chat-body">
                         <div class="chat-bubble">
                           <div class="chat-content">
-                            <p>Where?</p>
+    <audio controls>
+    <source src="/static/assets/img/2.mp3" type="audio/mpeg">
+    Тег audio не поддерживается вашим браузером. 
+    <a href="/static/assets/img/2.mp3">Скачайте музыку</a>.
+  </audio>
                             <span class="chat-time">8:35 am</span>
                           </div>
                           <div class="chat-action-btns">
@@ -120,7 +136,22 @@
                         </div>
                         <div class="chat-bubble">
                           <div class="chat-content">
-                            <p>OK, my name is Limingqiang. I like singing, playing basketballand so on.</p>
+                            <p>В качестве тестового задания ван жуно сделать следующее.</p></br>
+                            <p>
+                              Напишите два SQL запроса, которые отвечают на следующие вопросы:</br></br>
+
+1.Какова доля заказов с промокодами?</br>
+2.Какой самый популярный промокод (название) и какая сумма общих затрат по нему? Самый популярный промокод – это промокод, по которому получились наибольшие затраты в деньгах.</br>
+</br></br>
+Даны две таблицы в Базе данных:</br>
+</br></br>
+1.orders (id, promocode_id)</br>
+2.promocodes (id, name, discount)</br>
+</br></br>
+name – название промокода</br>
+discount – скидка в рублях</br>
+*Один промокод может применяться в разных заказах, но в одном заказе может быть применено не более одного промокода.
+                            </p>
                             <span class="chat-time">8:42 am</span>
                           </div>
                           <div class="chat-action-btns">
@@ -142,7 +173,7 @@
                       <div class="chat-body">
                         <div class="chat-bubble">
                           <div class="chat-content">
-                            <p>You wait for notice.</p>
+                            <p>Ок, я понял. решаю</p>
                             <span class="chat-time">8:30 am</span>
                           </div>
                           <div class="chat-action-btns">
@@ -155,7 +186,7 @@
                         </div>
                         <div class="chat-bubble">
                           <div class="chat-content">
-                            <p>Consectetuorem ipsum dolor sit?</p>
+                            <p>Ответ: orders (id, promocode_id) ?</p>
                             <span class="chat-time">8:50 am</span>
                           </div>
                           <div class="chat-action-btns">
@@ -168,7 +199,7 @@
                         </div>
                         <div class="chat-bubble">
                           <div class="chat-content">
-                            <p>OK?</p>
+                            <p>Или нет? сейчас скину еще, как решал по-другому</p>
                             <span class="chat-time">8:55 am</span>
                           </div>
                           <div class="chat-action-btns">
@@ -182,7 +213,7 @@
                         <div class="chat-bubble">
                           <div class="chat-content img-content">
                             <div class="chat-img-group clearfix">
-                              <p>Uploaded 3 Images</p>
+                              <p>Загружено 3 изображения</p>
                               <a class="chat-img-attach" href="#">
                                 <img width="182" height="137" alt="" src="{% static 'assets/img/placeholder.png' %}">
                                 <div class="chat-placeholder">
@@ -242,7 +273,7 @@
                       <div class="chat-body">
                         <div class="chat-bubble">
                           <div class="chat-content">
-                            <p>Uploaded 3 files</p>
+                            <p>Загружено 3 файла</p>
                             <ul class="attach-list">
                               <li><i class="fa fa-file"></i> <a href="#">example.avi</a></li>
                               <li><i class="fa fa-file"></i> <a href="#">activity.psd</a></li>
@@ -259,7 +290,7 @@
                         </div>
                         <div class="chat-bubble">
                           <div class="chat-content">
-                            <p>Consectetuorem ipsum dolor sit?</p>
+                            <p>Теперь я прошел?</p>
                             <span class="chat-time">8:50 am</span>
                           </div>
                           <div class="chat-action-btns">
@@ -272,7 +303,7 @@
                         </div>
                         <div class="chat-bubble">
                           <div class="chat-content">
-                            <p>OK?</p>
+                            <p>Когда будет следующий этап?</p>
                             <span class="chat-time">8:55 am</span>
                           </div>
                           <div class="chat-action-btns">
@@ -355,7 +386,7 @@
                         <div class="chat-bubble">
                           <div class="chat-content">
                             <ul class="attach-list">
-                              <li class="pdf-file"><i class="fa fa-file-pdf-o"></i> <a href="#">Document_2016.pdf</a>
+                              <li class="pdf-file"><i class="fa fa-file-pdf-o"></i> <a href="#">Document_2020.pdf</a>
                               </li>
                             </ul>
                             <span class="chat-time">9:00 am</span>
@@ -375,7 +406,7 @@
                         <div class="chat-bubble">
                           <div class="chat-content">
                             <ul class="attach-list">
-                              <li class="pdf-file"><i class="fa fa-file-pdf-o"></i> <a href="#">Document_2016.pdf</a>
+                              <li class="pdf-file"><i class="fa fa-file-pdf-o"></i> <a href="#">Document_2020.pdf</a>
                               </li>
                             </ul>
                             <span class="chat-time">9:00 am</span>
@@ -437,34 +468,34 @@
                     <img class="avatar" src="{% static 'assets/img/user.jpg' %}" alt="">
                     <span class="change-img">Change Image</span>
                   </div>
-                  <h3 class="user-name m-t-10 m-b-0">John Doe</h3>
-                  <small class="text-muted">Web Designer</small>
-                  <a href="edit-profile.html" class="btn btn-primary edit-btn"><i class="fa fa-pencil"></i></a>
+                  <h3 class="user-name m-t-10 m-b-0">Сергей Кондратьев</h3>
+                  <small class="text-muted">Аналитик Big Data</small>
+                  <a href="edit-profile.html" class="btn btn-primary edit-btn" style="#background-color: #1e3262"><i class="fa fa-pencil"></i></a>
                 </div>
                 <div class="chat-profile-info">
                   <ul class="user-det-list">
                     <li>
-                      <span>Username:</span>
+                      <span>Имя пользователя в системе:</span>
                       <span class="pull-right text-muted">johndoe</span>
                     </li>
                     <li>
-                      <span>DOB:</span>
-                      <span class="pull-right text-muted">24 July</span>
+                      <span>День рождения:</span>
+                      <span class="pull-right text-muted">24 июля</span>
                     </li>
                     <li>
                       <span>Email:</span>
                       <span class="pull-right text-muted">johndoe@example.com</span>
                     </li>
                     <li>
-                      <span>Phone:</span>
+                      <span>Телефон:</span>
                       <span class="pull-right text-muted">9876543210</span>
                     </li>
                   </ul>
                 </div>
                 <div class="tabbable">
                   <ul class="nav nav-tabs nav-tabs-solid nav-justified m-b-0">
-                    <li class="active"><a href="#all_files" data-toggle="tab">All Files</a></li>
-                    <li><a href="#my_files" data-toggle="tab">My Files</a></li>
+                    <li class="active"><a href="#all_files" data-toggle="tab" style="background-color: #1e3262!important">Все файлы</a></li>
+                    <li><a href="#my_files" data-toggle="tab">Мои файлы</a></li>
                   </ul>
                   <div class="tab-content">
                     <div class="tab-pane active" id="all_files">

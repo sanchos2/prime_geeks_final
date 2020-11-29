@@ -4,6 +4,14 @@
 {% block content %}
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">google.charts.load('current', {'packages':['corechart']});</script>
+
+
+<style type="text/css">
+  .div_text_gr p{
+    font-size: 14px;
+  }
+</style>
 
   <div class="page-wrapper">
     <div class="content container-fluid">
@@ -161,6 +169,37 @@ function drawStacked() {
       
     </div>
 
+ 
+<div class="col-md-12" style="margin-top: 30px;">
+  <div class="col-md-6">
+    <div><img src="/static/assets/img/graph.png" style="width: 600px; height: auto;">
+      
+    </div>
+    
+  </div>
+  <div class="col-md-6">
+    <div style="background-color: #fff; width: 600px; height: 374px;">
+      <div style="padding-left: 20px; padding-top: 20px;" class="div_text_gr">
+      <h3>Сравнение ЗП на вакансию с рынком</h3>
+      </br>
+      <b><p>VS Рынок</p></b>
+      <p>В среднем, на 5% ниже рынка</p>
+      </br></br>
+      <b><p>VS Газпромбанк</p></b>
+      <p>В среднем, на 7% выше</p>
+      </br></br>
+      <b><p>VS грейд тоже же направления</p></b>
+      <p>В среднем, на 3% выше</p>
+      </br></br>
+      </div>
+
+    </div>
+    
+  </div>
+  
+
+
+</div>
 
 
 

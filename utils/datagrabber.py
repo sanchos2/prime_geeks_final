@@ -1,14 +1,16 @@
 import json
-from django.db.utils import IntegrityError
 from urllib.parse import urljoin
-from bs4 import BeautifulSoup
-import requests
 
+import requests
+from bs4 import BeautifulSoup
+from django.db.utils import IntegrityError
+
+from utils.datetime_parser import parse_geekjob_date, parse_hh_date
 from utils.models import Vacancy
-from utils.util import parse_geekjob_date, parse_hh_date
 
 
 def check_salary(salary):
+    """Проверка длины строки."""
     return len(str(salary)) > 9
 
 
@@ -16,8 +18,8 @@ def get_geekjob_vacancy_snippet():
     """Получаем название и url вакансий."""
     site_url = 'https://geekjob.ru/'
 
-    with open('vac2.html', 'r', encoding='utf8') as file:
-        html = file.read()
+    with open('vacancy_gj.html', 'r', encoding='utf8') as vacancies:
+        html = vacancies.read()
     soup = BeautifulSoup(html, 'lxml')
     all_vacancies = soup.find('ul', class_='serp-list').findAll('li', class_='avatar')
 
@@ -32,24 +34,22 @@ def get_geekjob_full_vacancy():
     """получаем полные данные по вакансии."""
     resource_identifier = 'GJ'
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0'
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0',
     }
     for vacancy in Vacancy.objects.filter(source_id=None):
         response = requests.get(vacancy.source, headers=headers)
-        response.raise_for_status()
-        soup = BeautifulSoup(response.text, 'lxml')
         try:
+            response.raise_for_status()
+        except requests.HTTPError:
+            break
+        soup = BeautifulSoup(response.text, 'lxml')
+        try:  # noqa: WPS229
             raw_json = soup.find('script', type='application/ld+json').contents
             json_data = json.loads(''.join(raw_json))
         except json.decoder.JSONDecodeError:
-            print('Нет данных о вакансии')  # TODO логировать
+            break
         else:
-
-            # TODO pydantic
-
             vacancy.published_at = parse_geekjob_date(json_data.get('datePosted'))
-
-            # TODO проверка на уникальность идентификатора
             try:
                 vacancy.source_id = resource_identifier + json_data['identifier']['value']
             except KeyError:
@@ -76,30 +76,30 @@ def get_geekjob_full_vacancy():
                 vacancy.location_city = ''
 
             try:
-                vacancy.location_country = json_data['jobLocation']['address']['addressCountry'] # TODO проверить ключ name
+                vacancy.location_country = json_data['jobLocation']['address']['addressCountry']
             except KeyError:
                 vacancy.location_country = ''
-
+            salary = json_data['baseSalary']
             try:
-                vacancy.salary_currency = json_data['baseSalary']['currency'] or ''
+                vacancy.salary_currency = salary['currency'] or ''
             except KeyError:
                 vacancy.salary_currency = ''
 
-            try:
-                vacancy.salary_value = json_data['baseSalary']['value']['value']
+            try:  # noqa: WPS229
+                vacancy.salary_value = salary['value']['value']
                 if check_salary(vacancy.salary_value):
                     raise ValueError
             except (KeyError, ValueError):
                 vacancy.salary_value = None
 
-            try:
-                vacancy.salary_left_value = json_data['baseSalary']['value']['minValue']
+            try:  # noqa: WPS229
+                vacancy.salary_left_value = salary['value']['minValue']
                 if check_salary(vacancy.salary_left_value):
                     raise ValueError
             except (KeyError, ValueError):
                 vacancy.salary_left_value = None
 
-            try:
+            try:  # noqa: WPS229
                 vacancy.salary_right_value = json_data['baseSalary']['value']['maxValue']
                 if check_salary(vacancy.salary_right_value):
                     raise ValueError
@@ -117,7 +117,7 @@ def get_geekjob_full_vacancy():
                 skils[parent.text] = []
                 for child in parent.next_siblings:
                     if child.name == 'a':
-                        skils[parent.text] += [i.strip() for i in child.text.split(',')]
+                        skils[parent.text] += [_.strip() for _ in child.text.split(',')]
                     elif child.name == 'b':
                         break
             try:
@@ -136,8 +136,9 @@ def get_geekjob_full_vacancy():
 
 
 def get_json(url):
+    """Получение json."""
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0'
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0',
     }
     response = requests.get(url, headers=headers)
     response.raise_for_status()
@@ -145,50 +146,51 @@ def get_json(url):
 
 
 def get_hh_full_vacancy():
+    """Парсинг вакансий."""
     resource_identifier = 'HH'
-    with open('vac-hh.html', 'r', encoding='utf8') as file:
-        html = file.read()
+    with open('vac-hh.html', 'r', encoding='utf8') as vacancies:
+        html = vacancies.read()
     soup = BeautifulSoup(html, 'lxml')
     vacancies_ids = set()
     all_vacancies = soup.find_all('div', 'vacancy-serp-item__controls-item_response')
     for vacancy in all_vacancies:
         raw_data = vacancy.find('script')['data-params']
-        data = json.loads(raw_data)
-        vacancies_ids.add(data['vacancyId'])
+        vacancy_data = json.loads(raw_data)
+        vacancies_ids.add(vacancy_data['vacancyId'])
 
-    for id in vacancies_ids:
+    for row in vacancies_ids:
         vacancies_url = 'https://api.hh.ru/vacancies/'
         employers_url = 'https://api.hh.ru/employers/'
-        vacancy_url = vacancies_url + str(id)
-        data = get_json(vacancy_url)
-        try:
-            employer_url = employers_url + str(data['employer']['id'])
+        vacancy_url = vacancies_url + str(row)
+        vacancy_data = get_json(vacancy_url)
+        try:  # noqa: WPS229
+            employer_url = employers_url + str(vacancy_data['employer']['row'])
             employer = get_json(employer_url)
         except KeyError:
             employer = {'type': None}
 
-        title = data['name']
-        published_at = parse_hh_date(data['published_at'])
-        source_id = resource_identifier + str(id)
-        description = data['description']
+        title = vacancy_data['name']
+        published_at = parse_hh_date(vacancy_data['published_at'])
+        source_id = resource_identifier + str(row)
+        description = vacancy_data['description']
         employer_type = employer['type']
-        employer_name = data['employer']['name']
-        location_city = data['area']['name']
+        employer_name = vacancy_data['employer']['name']
+        location_city = vacancy_data['area']['name']
         location_country = 'planetEarth'
-        salary_currency = data['salary']['currency']
-        salary_value = data['salary']['from'] if not check_salary(data['salary']['from']) else None
-        salary_left_value = data['salary']['from'] if not check_salary(data['salary']['from']) else None
-        salary_right_value = data['salary']['to'] if not check_salary(data['salary']['to']) else None
-        if data['schedule']['id'] == 'fullDay':
+        salary_currency = vacancy_data['salary']['currency']  # noqa: WPS204
+        salary_value = vacancy_data['salary']['from'] if not check_salary(vacancy_data['salary']['from']) else None  # noqa: WPS504
+        salary_left_value = vacancy_data['salary']['from'] if not check_salary(vacancy_data['salary']['from']) else None  # noqa: WPS504
+        salary_right_value = vacancy_data['salary']['to'] if not check_salary(vacancy_data['salary']['to']) else None  # noqa: WPS504
+        if vacancy_data['schedule']['row'] == 'fullDay':
             job_format = 'FULL_TIME'
-        elif data['schedule']['id'] == 'part':
-            job_format ='PART_TIME'
+        elif vacancy_data['schedule']['row'] == 'part':
+            job_format = 'PART_TIME'
         else:
             job_format = ''
-        candidate_level = data['experience']['id']
-        specialization = ','.join([i['name'] for i in data['key_skills']])
-        branch = data['specializations'][0]['profarea_name']
-        source = data['alternate_url']
+        candidate_level = vacancy_data['experience']['row']
+        specialization = ','.join([_['name'] for _ in vacancy_data['key_skills']])
+        branch = vacancy_data['specializations'][0]['profarea_name']
+        source = vacancy_data['alternate_url']
         try:
             Vacancy.objects.get_or_create(
                 title=title,
@@ -210,12 +212,13 @@ def get_hh_full_vacancy():
                 source=source,
             )
         except IntegrityError:
-            pass
+            pass  # noqa: WPS420
 
 
 def get_response(url, payload=None):
+    """Получение ответа на запрос."""
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0'
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0',
     }
     response = requests.get(url, headers=headers, params=payload)
     try:
@@ -226,48 +229,46 @@ def get_response(url, payload=None):
 
 
 def get_habr_full_vacancy():
+    """Получение полного списка вакансий."""
     resource_identifier = 'HB'
     all_vacancies = []
-    for n in range(1, 3):
+    for page in range(1, 3):
         payload = {
             'q': 'аналитик',
             'type': 'all',
             'with_salary': 'true',
-            'page': n,
+            'page': page,
             'per_page': '100',
         }
-        url = 'https://career.habr.com/vacancies'
-        data = get_response(url, payload)
-        soup = BeautifulSoup(data.text, 'lxml')
+        vacancy_url = 'https://career.habr.com/vacancies'
+        vacancy_data = get_response(vacancy_url, payload)
+        soup = BeautifulSoup(vacancy_data.text, 'lxml')
         vacancies = soup.find('ul', class_='card-list--appearance-within-section').find_all('li')
 
-        for vacancy in vacancies:
-            all_vacancies.append(vacancy.find('a', 'vacancy-card__icon-link')['href'])
+        for link in vacancies:
+            all_vacancies.append(link.find('a', 'vacancy-card__icon-link')['href'])
 
     for vacancy in all_vacancies:
         site_url = 'https://career.habr.com/'
-        url = urljoin(site_url, vacancy)
-        data = get_response(url)
-        if not data:
+        vacancy_url = urljoin(site_url, vacancy)
+        vacancy_data = get_response(vacancy_url)
+        if not vacancy_data:
             break
-        soup = BeautifulSoup(data.text, 'lxml')
-        try:
+        soup = BeautifulSoup(vacancy_data.text, 'lxml')
+        try:  # noqa: WPS229
             raw_json = soup.find('script', type='application/ld+json').contents
             json_data = json.loads(''.join(raw_json), strict=False)
         except json.decoder.JSONDecodeError:
-            print('Нет данных о вакансии')
+            break
 
         published_at = parse_hh_date(json_data.get('datePosted'))
 
-        # TODO проверка на уникальность идентификатора
         try:
             title = json_data['title']
         except KeyError:
             title = ''
-        try:
-            source_id = resource_identifier + json_data['identifier']['value']
-        except KeyError:
-            source_id = resource_identifier + str(vacancy.id)
+
+        source_id = resource_identifier + str(vacancy.id)
 
         try:
             description = json_data['description']
@@ -291,27 +292,26 @@ def get_habr_full_vacancy():
             location_city = json_data['jobLocation']['address']
             location_country = ''
 
-
         try:
             salary_currency = json_data['baseSalary']['currency'] or ''
         except KeyError:
             salary_currency = ''
 
-        try:
+        try:  # noqa: WPS229
             salary_value = json_data['baseSalary']['value']['value']
             if check_salary(salary_value):
                 raise ValueError
         except (KeyError, ValueError):
             salary_value = None
 
-        try:
+        try:  # noqa: WPS229
             salary_left_value = json_data['baseSalary']['value']['minValue']
             if check_salary(salary_left_value):
                 raise ValueError
         except (KeyError, ValueError):
             salary_left_value = None
 
-        try:
+        try:  # noqa: WPS229
             salary_right_value = json_data['baseSalary']['value']['maxValue']
             if check_salary(salary_right_value):
                 raise ValueError
@@ -337,7 +337,7 @@ def get_habr_full_vacancy():
                 salary_left_value=salary_left_value,
                 salary_right_value=salary_right_value,
                 job_format=job_format,
-                source=url,
+                source=vacancy_url,
             )
         except IntegrityError:
-            pass
+            pass  # noqa: WPS420

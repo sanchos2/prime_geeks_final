@@ -1,8 +1,9 @@
 from datetime import datetime
+from dateutil import parser
 import locale
 import platform
+
 from django.utils import timezone
-import dateutil.parser
 
 if platform.system() == 'Windows':
     locale.setlocale(locale.LC_ALL, 'russian')
@@ -11,6 +12,7 @@ else:
 
 
 def parse_geekjob_date(date_str):
+    """Парсер текстового значения даты."""
     try:
         return datetime.strptime(date_str, '%Y-%m-%d')
     except ValueError:
@@ -18,9 +20,16 @@ def parse_geekjob_date(date_str):
 
 
 def parse_hh_date(date_str):
+    """Парсер текстового значения даты."""
     try:
-        return dateutil.parser.parse(date_str)
+        return parser.parse(date_str)
     except ValueError:
         return timezone.now()
 
 
+def parse_date(date_str):
+    """Парсер текстового значения даты."""
+    try:
+        return datetime.strptime(date_str, '%d-%m-%Y')
+    except (ValueError, TypeError):
+        return datetime.now()

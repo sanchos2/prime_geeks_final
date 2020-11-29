@@ -1,4 +1,3 @@
-from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 
 from recruitment.forms import VacancyForm
@@ -6,10 +5,12 @@ from recruitment.models import Candidate, VacancyRequest
 
 
 def index(request):
+    """Рендеринг главной страницы."""
     return render(request, 'index.html')
 
 
 def vacancies(requests):
+    """Рендеринг списка вакансий."""
     all_vacancies = VacancyRequest.objects.all()
     vacancies_list = []
     for vacancy in all_vacancies:
@@ -26,10 +27,11 @@ def vacancies(requests):
 
 
 def candidates(requests):
+    """Рендеринг списка кандидатов."""
     all_candidates = Candidate.objects.all()
-    candidates = []
+    candidates_list = []
     for candidate in all_candidates:
-        candidates.append({
+        candidates_list.append({
             'name': candidate.title,
             'raiting': 6,
             'social': 'OK',
@@ -37,27 +39,26 @@ def candidates(requests):
             'recommended_vacancy': get_object_or_404(VacancyRequest, pk=1),
             'contacts': 'elisey.fedorov@gmail.com',
         })
-    return render(requests, 'candidates.html', context={'candidates': candidates})
+    return render(requests, 'candidates.html', context={'candidates': candidates_list})
 
 
-def new_vacancy(requests):
-    return render(requests, 'new_vacancy.html')
-
-
-def view_vacancy(requests):  # TODO pk
+def view_vacancy(requests):
+    """Рендеринг описания вакансии."""
     return render(requests, 'vacancy_view.html')
 
 
 def video(requests):
+    """Рендеринг видео."""
     return render(requests, 'video.html')
 
 
 def chats(requests):
+    """Рендеринг чата."""
     return render(requests, 'chats.html')
 
 
 def new_vacancy(request):
-
+    """Обработка формы новой вакансии."""
     if request.method == 'POST':
         form = VacancyForm(request.POST)
         if form.is_valid():

@@ -4,6 +4,8 @@ from utils.models import Vacancy
 
 
 class VacancyAdmin(admin.ModelAdmin):
+    """Вывод в админку."""
+
     list_display = [
         'title',
         'salary_value',
