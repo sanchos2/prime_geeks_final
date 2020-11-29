@@ -12,6 +12,22 @@ class Language(models.Model):
         return self.name
 
 
+class Rating(models.Model):
+    """Модель рейтингов."""
+
+    skill = models.IntegerField(verbose_name='Рейтинг навыков', null=True, blank=True)
+    social = models.IntegerField(verbose_name='Социальный рейтинг', null=True, blank=True)
+
+    def __str__(self):
+        """Вывод в консоль."""
+        return f'{self.skill} {self.social}'
+
+    class Meta:  # noqa: WPS306
+        """Сортировка."""
+
+        ordering = ['skill', 'social']
+
+
 class Candidate(models.Model):
     """Модель кандидатов с резюме."""
 
@@ -40,6 +56,14 @@ class Candidate(models.Model):
     )
     source = models.TextField(blank=True)
     source_id = models.CharField(max_length=200, blank=True, unique=True)  # noqa: WPS432
+    rating = models.OneToOneField(
+        Rating,
+        verbose_name='Рейтинг',
+        on_delete=models.CASCADE,
+        related_name='candidates',
+        blank=True,
+        null=True,
+    )
 
     def __str__(self):
         """Вывод в консоль."""
@@ -48,7 +72,7 @@ class Candidate(models.Model):
     class Meta:  # noqa: WPS306
         """Сортировка."""
 
-        ordering = ['salary']
+        ordering = ['salary', ]
         verbose_name = 'Резюме'
         verbose_name_plural = 'Резюме'
 

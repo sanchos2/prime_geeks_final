@@ -1,14 +1,14 @@
 from django.contrib import admin
 
 from recruitment.models import Candidate, Language
-from recruitment.models import Level, HardRequirements, SoftRequirements, Specialization, VacancyRequest
+from recruitment.models import Level, HardRequirements, Rating, SoftRequirements, Specialization, VacancyRequest
 
 
 class CandidateAdmin(admin.ModelAdmin):
     """Кастомизация админки."""
 
     list_display = ['title', 'salary']
-    search_fields = ['source_id']
+    search_fields = ['source_id', 'title']
     list_per_page = 40
 
 
