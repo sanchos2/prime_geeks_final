@@ -17,18 +17,20 @@ sudo apt install python3
 sudo apt install python3-pip
 ```
 
-Клонируем проект, устанавливаем зависимости
+Клонируем проект
 
 ```sh
 git clone https://github.com/sanchos2/prime_geeks_final.git
 cd prime_geeks_final
-pip3 install -r requirements.txt
+
 ```
 
-Создаем виртуальное окружение
+Создаем виртуальное окружение, активируем его и  устанавливаем зависимости
 
 ```sh
 python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
 ```
 Для разработки переменные окружения можно не указывать - при этом будут использованы default значения
 Для production среды добавляем переменные окружения в .env файл и размещаем его в корне проекта
@@ -50,12 +52,20 @@ DB_PASSWORD=pa$$word
 ### Запуск
 
 Запуск проекта
-Активируем виртуальное окружение и запускаем сервер для разработки
+Активируем виртуальное окружение, применяем миграции к базе данных.
 
 ```sh
-source venv/bin/activate
-python3 manage.py runserver
+python manage.py migration
+python manage.py createsuperuser
 ```
+
+Создаем пользователя с правами администратора, собираем статику и  запускаем сервер для разработки
+
+```
+python manage.py collectstatic  # только в production
+python manage.py runserver
+```
+
 
 Переходим по адресу http://127.0.0.1:8000
 Панель администратора доступна по адресу http://127.0.0.1:8000/admin
