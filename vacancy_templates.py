@@ -119,7 +119,7 @@ pairs = list(set(pairs))
 print('similar_among_vacancies ' + str(round(100 * len(pairs) / len(test_index), 1)) + '%')
 
 # print templates
-# темплейты нужно ещё приводить ещё в более читаемый вид, но в целом идея отработала
+# темплейты нужно ещё приводить в более читаемый вид, но в целом идея отработала
 for i in range(len(pairs)):
     print(output2.iloc[pairs[i]])
 
