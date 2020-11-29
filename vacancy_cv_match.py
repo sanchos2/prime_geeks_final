@@ -124,6 +124,8 @@ def clean_text_prev(review_text):
     return no_spaces
 
 
+
+
 corpus.loc[len(corpus)] = corpus_vacancy[399]
 vacancy_id = len(corpus)
 corpus = list(map(lambda x: clean_text_prev(str(x)).strip(), corpus))
@@ -136,7 +138,16 @@ vectorizer = TfidfVectorizer(ngram_range=(1, 3))
 vectorizer.fit(corpus)
 X = vectorizer.transform(corpus).toarray()
 corrs = np.corrcoef(X)
-
+vacancy_corr = corrs[:-1, -1]
 
 # дальше надо найти по строке с вакансией топ-10 максимальных корреляций
 # и вывести резюме всех подходящих кандидатов
+out_data = pd.DataFrame({'index': range(len(vacancy_corr)),
+                         'corr': vacancy_corr}).sort_values(by=['corr'], ascending=False)
+top_results = out_data.head(10)
+
+
+for i in top_results.index:
+    print(fcandidate_data.iloc[i, 17])
+
+
